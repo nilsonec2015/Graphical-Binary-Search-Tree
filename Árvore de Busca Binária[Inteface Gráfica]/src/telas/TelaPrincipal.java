@@ -5,6 +5,7 @@
  */
 package telas;
 
+import interfaces.InterfaceArvore;
 import modelo.Abb;
 import modelo.No;
 import javax.swing.JLabel;
@@ -23,15 +24,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     public TelaPrincipal() {
         initComponents();
-        arvore = new Abb();
+        arvore = new Abb(new InterfaceArvore() {
+            @Override
+            public void desenhar(No no) {
+                    panel.add(no, new AbsoluteConstraints(x0, 10, 50, 50));
+                    panel.validate();
+                    panel.repaint();
+            }
+        });
 
-//        arvore.inserir(5);
-//        arvore.inserir(4);
-//        arvore.inserir(3);
+//        arvore.desenhar(5);
+//        arvore.desenhar(4);
+//        arvore.desenhar(3);
 //        
-//        arvore.inserir(11);
-//        arvore.inserir(10);
-//        arvore.inserir(12);
+//        arvore.desenhar(11);
+//        arvore.desenhar(10);
+//        arvore.desenhar(12);
 //        System.out.println("" + arvore.getAlturaEsq());
 //        System.out.println("" + arvore.getAlturaDir());
 //        System.out.println("" + arvore.getAltura());
@@ -119,13 +127,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            
+
             int num = Integer.parseInt(txNo.getText());
             arvore.inserir(num);
-            No lbNo = new No(num);
-            panel.add(lbNo, new AbsoluteConstraints(x0, 10, 50, 50));
-            panel.validate();
-            panel.repaint();
+
         } catch (Exception e) {
             System.out.println("Isto nao eh um numero inteiro");
         }

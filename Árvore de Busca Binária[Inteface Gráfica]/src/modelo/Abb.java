@@ -1,18 +1,23 @@
 
 package modelo;
 
+import interfaces.InterfaceArvore;
+
 /**
  *
  * @author nilso
  */
-public class Abb {
+public class Abb{
 
     public static No raiz;
     private static int alturaEsq=0;
     private static int alturaDir=0;
+    private InterfaceArvore comandos;
     
-    public void Abb(){
-        
+    public Abb(){}
+    
+    public Abb(InterfaceArvore comandos){
+        this.comandos = comandos;  
     }
     
     int findHeight(No aNode) {
@@ -69,19 +74,21 @@ public class Abb {
         inserir(raiz, valor);
 
     }
-
+    
     //versão completa usada internamente
     private void inserir(No no, int valor) {
         //altura parcial
         int altura = 0;
         if (no == null) {
             System.out.println("Inserindo " + valor + " na RAIZ da arvore");
-            raiz = new No(valor);            
+            raiz = new No(valor);          
+            comandos.desenhar(raiz);
         } else if (valor < no.valor) {//ramo da esquerda
             if (no.noEsq == null) {
                 System.out.println("Inserindo " + valor + " na esquerda de " + no.valor);
                 
-                no.noEsq = new No(valor);                
+                no.noEsq = new No(valor);   
+                comandos.desenhar(no.noEsq);
                 
                 if(valor < raiz.valor)
                     alturaEsq++;
@@ -96,6 +103,7 @@ public class Abb {
                 System.out.println("Inserindo " + valor + " na direita de " + no.valor);
                 
                 no.noDir = new No(valor);
+                comandos.desenhar(no.noDir);
                 
                 if(valor > raiz.valor)
                     alturaDir++;
