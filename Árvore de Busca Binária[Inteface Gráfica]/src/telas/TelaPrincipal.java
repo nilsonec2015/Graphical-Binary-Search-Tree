@@ -5,8 +5,8 @@
  */
 package telas;
 
-import ABB.Abb;
-import ABB.LabelNo;
+import modelo.Abb;
+import modelo.No;
 import javax.swing.JLabel;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 
@@ -122,7 +122,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             
             int num = Integer.parseInt(txNo.getText());
             arvore.inserir(num);
-            LabelNo lbNo = new LabelNo(num+"");
+            No lbNo = new No(num);
             panel.add(lbNo, new AbsoluteConstraints(x0, 10, 50, 50));
             panel.validate();
             panel.repaint();
