@@ -27,9 +27,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         arvore = new Abb(new InterfaceArvore() {
             @Override
             public void desenhar(No no) {
-                    panel.add(no, new AbsoluteConstraints(x0, 10, 50, 50));
-                    panel.validate();
-                    panel.repaint();
+                //no.setPosicoes(x0, y0);
+                System.out.println("Altura: "+no.altura+" Relacao: "+no.relacao);
+                panel.add(no, new AbsoluteConstraints(
+                        x0+(no.relacao*no.altura)*54, 
+                        y0+(no.altura-1)*54, 
+                        50, 50));
+                panel.validate();
+                panel.repaint();
             }
         });
 
@@ -126,14 +131,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
+        //try {
 
             int num = Integer.parseInt(txNo.getText());
             arvore.inserir(num);
 
-        } catch (Exception e) {
-            System.out.println("Isto nao eh um numero inteiro");
-        }
+        //} catch (NumberFormatException e) {
+        //    System.out.println("Isto nao eh um numero inteiro");
+        //} catch (Exception e){
+        //    System.out.println(e);
+        //}
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

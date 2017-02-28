@@ -1,4 +1,3 @@
-
 package modelo;
 
 import interfaces.InterfaceArvore;
@@ -7,49 +6,55 @@ import interfaces.InterfaceArvore;
  *
  * @author nilso
  */
-public class Abb{
+public class Abb {
 
     public static No raiz;
-    private static int alturaEsq=0;
-    private static int alturaDir=0;
+    private static int alturaEsq = 0;
+    private static int alturaDir = 0;
     private InterfaceArvore comandos;
-    
-    public Abb(){}
-    
-    public Abb(InterfaceArvore comandos){
-        this.comandos = comandos;  
+
+    public Abb() {
     }
-    
+
+    public Abb(InterfaceArvore comandos) {
+        this.comandos = comandos;
+    }
+
     int findHeight(No aNode) {
-    if (aNode == null) {
-        return -1;
+        if (aNode == null) {
+            return -1;
+        }
+
+        int lefth = findHeight(aNode.noEsq);
+        int righth = findHeight(aNode.noDir);
+
+        if (lefth > righth) {
+            return lefth + 1;
+        } else {
+            return righth + 1;
+        }
     }
 
-    int lefth = findHeight(aNode.noEsq);
-    int righth = findHeight(aNode.noDir);
-
-    if (lefth > righth) {
-        return lefth + 1;
-    } else {
-        return righth + 1;
-    }
-}
-    
     //no add
     /*
     se na esquerda e na direita do no eh nulo, aumento a altura
-    */
-    
-    public int getAltura(){
-        if(alturaEsq>=alturaDir)
-            return this.alturaEsq;
-        else
-            return this.alturaDir;
+     */
+//    public int getAltura() {
+//        if (alturaEsq >= alturaDir) {
+//            return this.alturaEsq;
+//        } else {
+//            return this.alturaDir;
+//        }
+//    }
+    public int getAltura() {
+        return Math.abs(alturaDir - alturaEsq);
     }
-    public int getAlturaDir(){
+
+    public int getAlturaDir() {
         return this.alturaDir;
     }
-    public int getAlturaEsq(){
+
+    public int getAlturaEsq() {
         return this.alturaEsq;
     }
 
@@ -70,51 +75,69 @@ public class Abb{
      */
     //versão simplificada usada fora da classe
     public void inserir(int valor) {
-        
+
         inserir(raiz, valor);
 
     }
-    
+
     //versão completa usada internamente
     private void inserir(No no, int valor) {
         //altura parcial
         int altura = 0;
         if (no == null) {
             System.out.println("Inserindo " + valor + " na RAIZ da arvore");
-            raiz = new No(valor);          
+            raiz = new No(valor, 1, 0);
             comandos.desenhar(raiz);
         } else if (valor < no.valor) {//ramo da esquerda
             if (no.noEsq == null) {
                 System.out.println("Inserindo " + valor + " na esquerda de " + no.valor);
-                
-                no.noEsq = new No(valor);   
+
+                //incrementaAltura(valor);
+                //no.noEsq = new No(valor, no.altura + 1);
+                if (valor > raiz.valor) {
+                    alturaDir++;
+                    no.noEsq = new No(valor, no.altura + 1, 1);
+                } else {
+                    alturaEsq--;
+                    no.noEsq = new No(valor, no.altura + 1, -2);
+                }
                 comandos.desenhar(no.noEsq);
-                
-                if(valor < raiz.valor)
-                    alturaEsq++;
-                
-            } else {                
+
+            } else {
                 inserir(no.noEsq, valor);
             }
 
-        } else if(valor > no.valor){//ramo da direita
-            if (no.noDir == null) {
-                
+        } else if (valor > no.valor) {//ramo da direita
+            if (no.noDir == null) {//
+
                 System.out.println("Inserindo " + valor + " na direita de " + no.valor);
-                
-                no.noDir = new No(valor);
-                comandos.desenhar(no.noDir);
-                
-                if(valor > raiz.valor)
+
+                //incrementaAltura(valor);
+                if (valor > raiz.valor) {
                     alturaDir++;
-                
+                    no.noDir = new No(valor, no.altura + 1, 2);
+                } else {
+                    alturaEsq--;
+                    no.noDir = new No(valor, no.altura + 1, -1);
+                }
+                //no.noDir = new No(valor, no.altura + 1);
+                comandos.desenhar(no.noDir);
+
             } else {
                 inserir(no.noDir, valor);
             }
-        }else{
-            System.out.println("O valor "+valor+" já está na árvore");
+        } else {
+            System.out.println("O valor " + valor + " já está na árvore");
         }
 
+    }
+
+    private void incrementaAltura(int valor) {
+        if (valor > raiz.valor) {
+            alturaDir++;
+        } else {
+            alturaEsq--;
+        }
     }
 
     /*
@@ -138,6 +161,7 @@ public class Abb{
     public void preordem() {
         preordem(raiz);
     }
+
     private static void preordem(No no) {
         if (no != null) {
             System.out.print(no.valor + ", ");
@@ -149,6 +173,7 @@ public class Abb{
     public void posordem() {
         posordem(raiz);
     }
+
     private static void posordem(No no) {
         if (no != null) {
             posordem(no.noEsq);
@@ -157,9 +182,10 @@ public class Abb{
         }
     }
 
-    public void emordem(){
+    public void emordem() {
         emordem(raiz);
-    }    
+    }
+
     private static void emordem(No no) {
         if (no != null) {
             emordem(no.noEsq);
@@ -197,6 +223,7 @@ public class Abb{
         raiz = remover(raiz, valor);
 
     }
+
     //versão completa usada internamente
     private static No remover(No no, int valor) {
         //caso esteja tentando remover um valor que nao existe
@@ -214,6 +241,7 @@ public class Abb{
         } //caso tenha encontrado o valor
         else //if(valor == no.valor)
         //tratando a remocao
+        {
             if (no.noEsq == null && no.noDir == null) {//no folha
                 //no lugar do no eu retorno nulo (apago o no)
                 return null;
@@ -253,5 +281,6 @@ public class Abb{
                 //retorno este no para o pai dele
                 return no;
             }
+        }
     }
 }
