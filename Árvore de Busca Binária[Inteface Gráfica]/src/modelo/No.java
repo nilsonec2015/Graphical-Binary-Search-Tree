@@ -8,9 +8,24 @@ import javax.swing.JLabel;
  */
 public class No extends JLabel {
 
-    protected int valor;
+    public int valor;
     public int altura;
     public int relacao;
+    
+    //private int Y=Math.pow(2, xP-1);
+    //y aumenta de 0 ao infinito esta é a altura do no em vez de usar x vamos usar altura
+    public int x=0;
+    //y aumenta de 0 a +infinito ede 0 a -infinito
+    //a raiz é 0 seus filhos sao -1 e +1
+    //filhos[2] sao -2 -1 1 2
+    //filhos[3] sao -4 -3 -2 -1 1 2 3 4
+    //filhos[4] sao -8 -7 -6 -5 -4 -3 -2 -1 1 2 3 4 5 6 7 8
+    //e assim por diante
+    //o y é o indice horizontal do no
+    //formula do y:
+    //filho da direita yf = 2*Y
+    //filho da esquerda yf = 2*Y-1
+    public int y=0;
 
     No noEsq;
     No noDir;
@@ -20,10 +35,10 @@ public class No extends JLabel {
         desenhar(valor + "");
     }
 
-    public No(int valor, int altura, int relacao) {
+    public No(int valor, int altura, int y) {
         this.valor = valor;
         this.altura = altura;
-        this.relacao = relacao;
+        this.y = y;
         desenhar(valor + "");
     }
     

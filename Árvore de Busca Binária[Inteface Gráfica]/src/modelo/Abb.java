@@ -8,7 +8,7 @@ import interfaces.InterfaceArvore;
  */
 public class Abb {
 
-    public static No raiz;
+    private static No raiz;
     private static int alturaEsq = 0;
     private static int alturaDir = 0;
     private InterfaceArvore comandos;
@@ -18,6 +18,10 @@ public class Abb {
 
     public Abb(InterfaceArvore comandos) {
         this.comandos = comandos;
+    }
+
+    public void limpar() {
+        raiz = null;
     }
 
     int findHeight(No aNode) {
@@ -55,7 +59,7 @@ public class Abb {
     }
 
     public int getAlturaEsq() {
-        return this.alturaEsq;
+        return -this.alturaEsq;
     }
 
     /*INSERÇÃO
@@ -90,46 +94,36 @@ public class Abb {
             comandos.desenhar(raiz);
         } else if (valor < no.valor) {//ramo da esquerda
             if (no.noEsq == null) {
-                System.out.println("Inserindo " + valor + " na esquerda de " + no.valor);
-
-                //incrementaAltura(valor);
-                //no.noEsq = new No(valor, no.altura + 1);
-                if (valor > raiz.valor) {
-                    alturaDir++;
-                    no.noEsq = new No(valor, no.altura + 1, 1);
-                } else {
-                    alturaEsq--;
-                    no.noEsq = new No(valor, no.altura + 1, -2);
+                
+                if(no.y < raiz.y){//y a esquerda da arvore e esquerda do no
+                    no.noEsq = new No(valor, no.altura + 1, 2 * no.y);
+                }else if(no.y > raiz.y){//y a direita da arvore e direita do no
+                    no.noEsq = new No(valor, no.altura + 1, 2 * no.y - 1);
+                }else{//primeiro no a esquerda da raiz
+                    no.noEsq = new No(valor, no.altura + 1, -1);
                 }
                 comandos.desenhar(no.noEsq);
-
             } else {
                 inserir(no.noEsq, valor);
             }
 
         } else if (valor > no.valor) {//ramo da direita
-            if (no.noDir == null) {//
-
-                System.out.println("Inserindo " + valor + " na direita de " + no.valor);
-
-                //incrementaAltura(valor);
-                if (valor > raiz.valor) {
-                    alturaDir++;
-                    no.noDir = new No(valor, no.altura + 1, 2);
-                } else {
-                    alturaEsq--;
-                    no.noDir = new No(valor, no.altura + 1, -1);
+            if (no.noDir == null) {            
+                
+                if(no.y < raiz.y){//y a esquerda da arvore e direita do no
+                    no.noDir = new No(valor, no.altura + 1, 2 * no.y + 1);
+                }else if(no.y > raiz.y){//y a direita da arvore e direita do no
+                    no.noDir = new No(valor, no.altura + 1, 2 * no.y);
+                }else{//primeiro no a direita da raiz
+                    no.noDir = new No(valor, no.altura + 1, 1);
                 }
-                //no.noDir = new No(valor, no.altura + 1);
                 comandos.desenhar(no.noDir);
-
             } else {
                 inserir(no.noDir, valor);
             }
         } else {
             System.out.println("O valor " + valor + " já está na árvore");
         }
-
     }
 
     private void incrementaAltura(int valor) {
@@ -162,9 +156,10 @@ public class Abb {
         preordem(raiz);
     }
 
-    private static void preordem(No no) {
+    private void preordem(No no) {
         if (no != null) {
             System.out.print(no.valor + ", ");
+            comandos.desenhar(no);
             preordem(no.noEsq);
             preordem(no.noDir);
         }
@@ -186,10 +181,11 @@ public class Abb {
         emordem(raiz);
     }
 
-    private static void emordem(No no) {
+    private void emordem(No no) {
         if (no != null) {
             emordem(no.noEsq);
-            System.out.print(no.valor + ", ");
+            //System.out.print(no.valor + ", ");
+            comandos.desenhar(no);
             emordem(no.noDir);
         }
     }
